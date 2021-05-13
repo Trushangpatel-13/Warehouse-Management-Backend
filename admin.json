@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "smart-warehouse-1406f",
+  "private_key_id": "964b1643b0d5e602998da76eebb69fbf6cf7f870",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDkq6SDpcvuilTP\nHx3QZzMonbTNvCxavJK+SwVQAB8RUm1WiXGkYg+QwA8Qi3Ib3y26zI4ZAkWLy8ro\nFVUjx+GNFomfUcOnhVjQsBvVyrIUJAOUGDd6kV6Bd9C7I8RWswp1xFAUdK3bpSxH\nX6md8TnyL1/EFhjXmBXkRpZghciFHPnvKSbxXHwkWRH3qF/xITV7/0ruWdXmBMkt\nVGO5r5MkBVJZY+C19W8uCklFiAtHzCh6hqfo3Ax7rOxxm7eUOt1RFN9ZVdCp4/bB\niSH3wTA3TAzO+Te56iml0Trv8DKADFutu0Krh+G+Ysr82OqKkbnWxeVQLyMY1RtG\nApY4wJ6tAgMBAAECggEAEk1wsf7Lt1CIIDnX243fCOGyjoMAs9SDFEsR5kjUM8E6\nsiH3IBafM1FEA2l93SA8W0azGupVIa7Sk0fd1CrT8UR8CG31cIuaQ73MxIxgO390\nb96OVjebblZmNQxUUzIqZKmtVS3PmpR6Wk4cV+FuZ2WGTz4Lh/oKyoYh1CDxH0I/\nMTZtKm54dHdjybATsrwiQovl22khWvMM4Ni8VEytEhf0NVR+okaXtt+lrPg78cNp\nIfX3ScMyDRMqWfYA+z4xnHeM8FtIY4XSrqKGO7UOOQ91ajBSBALQTA0oTyhCCI72\nlvEN0driEkAAJShWFe5jwjUf0MuYtbIIafBsouwmMQKBgQD+baMpdYyQIGQLpXfB\nzt5wUsjZGJ8DF9+SbINIF0EMKjAQVFSPb5YJMxTMoa8p3hQJWgzs/kM7TD98TDKK\nRRkVUsPINWCjUxJHy5jsKcE2bLE9Jw0ChtNiXDV4IfLCHbmqqQCvMn/zIhzbOEqF\ngi6YYD+crBDNXWsqqJZeIfDiRQKBgQDmFUVbBd8Of5WmWD+IZqSfNRB0poNFlncE\ncQqjk1njvRh4Zc2nYDpCWvAwc6Is/FUtVcOuGCGyQUEzehenNXPgUHIP2U01AsTK\nDH/+DzyFK1MrIaCyzeDcFaJ6cBBdlEYXx4Wce0QcVUKfgJkSIGZd7RMU1wAshwkb\nowTGoL3FSQKBgQC/jlAv4L7JrHlmg1gc5OF4c/uf5/egXpMHLQfSeR+SRxkU0kkw\nDPVLS9g3EOxOe1Nejxv4Op7nwEp0DPJoRAnUkhGxZO6zSNIUl+c0t2Mu1LrEregP\npO71uTLQlc6t869cHA3V2hGXPnG3YzRIPHFUa/K4xJuJ4vHSlkdP7AHueQKBgBtB\n4dmKtIYvLzdptP0fy9jgnHZ1U4/m52qrSatfRYLpYADDbr2pdL1vsIzM5iWWLzET\nu/7f9P39JRBIIo04k+W7IggmojLphQ66tF8Qxwavv0aY0UTdhwoLthfzNr0fV75x\ncK69G7CPmTj0Ly4qkHYII/6QCgE8biPMCEDPwiuhAoGAKnn9lDsYE1yXhlTIhvcZ\nCe3hpYgR3iH23Cbhp4Nv/xLj6bPNxUaS4ofAw6NaECkF1MlEkBf/VmksEIe5uCKk\nvB3H5bnq7ur4RBSDnKiDlM6bnNVPXeRGWuhF4Ep+4n0yKhZld3/T8z9JjetD2f7I\nOlr71r20WJabaTBf6psGkNY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-unute@smart-warehouse-1406f.iam.gserviceaccount.com",
+  "client_id": "105400091865716505988",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-unute%40smart-warehouse-1406f.iam.gserviceaccount.com"
+}
