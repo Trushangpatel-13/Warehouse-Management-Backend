@@ -1,5 +1,4 @@
 const Router = require('express').Router();
-const ProductDetail = require('../models/Products');
 const admin = require('firebase-admin');
 
 var serviceAccount = require('../admin.json');
@@ -18,7 +17,7 @@ Router.route('/add_product')
         path = "RFID/" + req.body.uid;
         db.ref(path).once('value', (uid) => {
             console.log(uid.val());
-            algorithm(uid.val(), res);
+            algorithm(uid.val(), res, req.body.uid);
             //return res.status(200).json({data:res_data});
 
 
@@ -34,7 +33,7 @@ Router.route('/add_product')
         // 1 unit - 20cm
     })
 
-function algorithm(data, res) {
+function algorithm(data, res, uid_value) {
     let scale_quant = 8;
     //return data.item_type;
     db.ref("Packages").once('value', (products) => {
@@ -42,13 +41,13 @@ function algorithm(data, res) {
             let final_x_cord = -1;
             let final_y_cord = -1;
             if (data.item_type === "Food") {
-                final_x_cord = 2;
+                final_x_cord = 0;
                 final_y_cord = 0;
             } else if (data.item_type === "Cloth") {
                 final_x_cord = 1;
                 final_y_cord = 0;
             } else {
-                final_x_cord = 0;
+                final_x_cord = 2;
                 final_y_cord = 0;
             }
             let item = {
@@ -89,8 +88,8 @@ function algorithm(data, res) {
         let final_x_cord = -1;
         let final_y_cord = -1;
 
-        if (itemType === "Food") {
-            // for food
+        if (itemType === "Electronic") {
+            // for Electronic
             for (let i = 2; i >= 0; i--) {
                 for (let j = 0; j <= 2; j++) {
                     if (board[i][j] === 0) {
@@ -120,7 +119,7 @@ function algorithm(data, res) {
                 }
             }
         } else {
-            // for other
+            // for Food Categry
             final_x_cord = -1;
             final_y_cord = -1;
             for (let i = 0; i >= 0; i--) {
@@ -149,6 +148,13 @@ function algorithm(data, res) {
             y_cord: (final_y_cord)
         };
 
+        let response_data = {
+            x_cord: (final_x_cord),
+            y_cord: (final_y_cord),
+            UID: uid_value,
+            
+        }
+
 
         let count = n.toString();
         //console.log(typeof (count));
@@ -157,7 +163,7 @@ function algorithm(data, res) {
         //db.ref("Packages").push(item);
         db.ref("Packages").child(count).set(item);
 
-        return res.status(200).json({ status: "success", data: item });
+        return res.status(200).json({ status: "success", data: response_data });
     })
 
 }
