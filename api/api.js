@@ -12,7 +12,17 @@ admin.initializeApp({
 var db = admin.database();
 
 Router.route('/add_product')
+    
+
     .post((req, res) => {
+        path = "RFID/"+req.body.uid;
+        db.ref(path).once('value',(uid) => {
+            console.log(uid.val());
+            algorithm(uid.val(),res);
+            //return res.status(200).json({data:res_data});
+            
+            
+        })
         // we have three different type of the type of products
         // 1. food
         // 2. cloth
@@ -22,17 +32,23 @@ Router.route('/add_product')
         // other (1st and 2nd)
 
         // 1 unit - 20cm
-
+    })
+        
+    function algorithm(data,res){
         let scale_quant = 8;
+        //return data.item_type;
 
+        
+
+        
         db.ref("Packages").once('value', (products) => {
             if (products.val() == null) {
                 let final_x_cord = -1;
                 let final_y_cord = -1;
-                if (req.body.item_type === "Food") {
+                if (data.item_type === "Food") {
                     final_x_cord = 5;
                     final_y_cord = 0;
-                } else if (req.body.item_type === "Cloth") {
+                } else if (data.item_type === "Cloth") {
                     final_x_cord = 3;
                     final_y_cord = 0;
                 } else {
@@ -40,16 +56,16 @@ Router.route('/add_product')
                     final_y_cord = 0;
                 }
                 let item = {
-                    serial_number: req.body.serial_number,
-                    manufacturer: req.body.manufacturer,
+                    serial_number: data.serial_number,
+                    manufacturer: data.manufacturer,
                     date_of_entry: new Date(),
-                    date_of_expiry: req.body.date_of_expiry,
-                    item_type: req.body.item_type,
+                    date_of_expiry: data.date_of_expiry,
+                    item_type: data.item_type,
                     x_cord: (final_x_cord + 1) * scale_quant,
                     y_cord: (final_y_cord + 1) * scale_quant
                 }
                 db.ref("Packages").child("0").set(item);
-                return res.json({ status: "success", data: item });
+                return res.status(200).json({item});
             }
             let n = Object.keys(products.val()).length;
 
@@ -76,7 +92,7 @@ Router.route('/add_product')
                 board[x][y] = 1;
             }
 
-            let itemType = req.body.item_type;
+            let itemType = data.item_type;
             let final_x_cord = -1;
             let final_y_cord = -1;
 
@@ -127,30 +143,32 @@ Router.route('/add_product')
             }
 
             if (final_x_cord === -1 && final_y_cord === -1) {
-                return res.json({ status: "error no slots available" });
+                return res.status(200).json({ status: "error no slots available" });
             }
 
             let item = {
-                serial_number: req.body.serial_number,
-                manufacturer: req.body.manufacturer,
+                serial_number: data.serial_number,
+                manufacturer: data.manufacturer,
                 date_of_entry: new Date(),
-                date_of_expiry: req.body.date_of_expiry,
-                item_type: req.body.item_type,
+                date_of_expiry: data.date_of_expiry,
+                item_type: data.item_type,
                 x_cord: (final_x_cord + 1) * scale_quant,
                 y_cord: (final_y_cord + 1) * scale_quant
             }
 
 
             let count = n.toString();
-            console.log(typeof (count));
-            console.log(count);
+            //console.log(typeof (count));
+            //console.log(count);
 
             //db.ref("Packages").push(item);
             db.ref("Packages").child(count).set(item);
 
-            return res.json({ status: "success", data: item });
+            return res.status(200).json({ status: "success", data: item });
         })
-    })
+
+    }
+    
 
 // On the all information product page I need to get all the information one by one
 Router.route('/get_info')
