@@ -12,16 +12,16 @@ admin.initializeApp({
 var db = admin.database();
 
 Router.route('/add_product')
-    
+
 
     .post((req, res) => {
-        path = "RFID/"+req.body.uid;
-        db.ref(path).once('value',(uid) => {
+        path = "RFID/" + req.body.uid;
+        db.ref(path).once('value', (uid) => {
             console.log(uid.val());
-            algorithm(uid.val(),res);
+            algorithm(uid.val(), res);
             //return res.status(200).json({data:res_data});
-            
-            
+
+
         })
         // we have three different type of the type of products
         // 1. food
@@ -33,147 +33,139 @@ Router.route('/add_product')
 
         // 1 unit - 20cm
     })
-        
-    function algorithm(data,res){
-        let scale_quant = 8;
-        //return data.item_type;
 
-        
-
-        
-        db.ref("Packages").once('value', (products) => {
-            if (products.val() == null) {
-                let final_x_cord = -1;
-                let final_y_cord = -1;
-                if (data.item_type === "Food") {
-                    final_x_cord = 5;
-                    final_y_cord = 0;
-                } else if (data.item_type === "Cloth") {
-                    final_x_cord = 3;
-                    final_y_cord = 0;
-                } else {
-                    final_x_cord = 1;
-                    final_y_cord = 0;
-                }
-                let item = {
-                    serial_number: data.serial_number,
-                    manufacturer: data.manufacturer,
-                    date_of_entry: new Date(),
-                    date_of_expiry: data.date_of_expiry,
-                    item_type: data.item_type,
-                    x_cord: (final_x_cord + 1) * scale_quant,
-                    y_cord: (final_y_cord + 1) * scale_quant
-                }
-                db.ref("Packages").child("0").set(item);
-                return res.status(200).json({item});
-            }
-            let n = Object.keys(products.val()).length;
-
-
-            // number of products in the board
-
-            // initially all the entries in the board is empty
-            // 0 - not visited
-            // 1  - visited
-
-            let board = [
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0]
-            ];
-
-            for (let i = 0; i < n; i++) {
-                let x = ((products.val()[i].x_cord) / scale_quant) - 1;
-                let y = ((products.val()[i].y_cord) / scale_quant) - 1;
-                // marking the position of the product in the board
-                board[x][y] = 1;
-            }
-
-            let itemType = data.item_type;
+function algorithm(data, res) {
+    let scale_quant = 8;
+    //return data.item_type;
+    db.ref("Packages").once('value', (products) => {
+        if (products.val() == null) {
             let final_x_cord = -1;
             let final_y_cord = -1;
-
-            if (itemType === "Food") {
-                // for food
-                for (let i = 5; i >= 0; i--) {
-                    for (let j = 0; j <= 5; j++) {
-                        if (board[i][j] === 0) {
-                            final_x_cord = i;
-                            final_y_cord = j;
-                            break;
-                        }
-                    }
-                    if (final_x_cord !== -1 && final_y_cord !== -1) {
-                        break;
-                    }
-                }
-            } else if (itemType === "Cloth") {
-                // for cloth
-                final_x_cord = -1;
-                final_y_cord = -1;
-                for (let i = 3; i >= 0; i--) {
-                    for (let j = 0; j <= 5; j++) {
-                        if (board[i][j] === 0) {
-                            final_x_cord = i;
-                            final_y_cord = j;
-                            break;
-                        }
-                    }
-                    if (final_x_cord !== -1 && final_y_cord !== -1) {
-                        break;
-                    }
-                }
+            if (data.item_type === "Food") {
+                final_x_cord = 2;
+                final_y_cord = 0;
+            } else if (data.item_type === "Cloth") {
+                final_x_cord = 1;
+                final_y_cord = 0;
             } else {
-                // for other
-                final_x_cord = -1;
-                final_y_cord = -1;
-                for (let i = 1; i >= 0; i--) {
-                    for (let j = 0; j <= 5; j++) {
-                        if (board[i][j] === 0) {
-                            final_x_cord = i;
-                            final_y_cord = j;
-                            break;
-                        }
-                    }
-                    if (final_x_cord !== -1 && final_y_cord !== -1) break;
-                }
+                final_x_cord = 0;
+                final_y_cord = 0;
             }
-
-            if (final_x_cord === -1 && final_y_cord === -1) {
-                return res.status(200).json({ status: "error no slots available" });
-            }
-
             let item = {
                 serial_number: data.serial_number,
                 manufacturer: data.manufacturer,
                 date_of_entry: new Date(),
                 date_of_expiry: data.date_of_expiry,
                 item_type: data.item_type,
-                x_cord: (final_x_cord + 1) * scale_quant,
-                y_cord: (final_y_cord + 1) * scale_quant
+                x_cord: (final_x_cord),
+                y_cord: (final_y_cord)
             }
+            db.ref("Packages").child("0").set(item);
+            return res.status(200).json({ item });
+        }
+        let n = Object.keys(products.val()).length;
 
 
-            let count = n.toString();
-            //console.log(typeof (count));
-            //console.log(count);
+        // number of products in the board
 
-            //db.ref("Packages").push(item);
-            db.ref("Packages").child(count).set(item);
+        // initially all the entries in the board is empty
+        // 0 - not visited
+        // 1  - visited
 
-            return res.status(200).json({ status: "success", data: item });
-        })
+        let board = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
 
-    }
-    
+        for (let i = 0; i < n; i++) {
+            let x = (products.val()[i].x_cord);
+            let y = (products.val()[i].y_cord);
+            // marking the position of the product in the board
+            board[x][y] = 1;
+        }
+
+        let itemType = data.item_type;
+        let final_x_cord = -1;
+        let final_y_cord = -1;
+
+        if (itemType === "Food") {
+            // for food
+            for (let i = 2; i >= 0; i--) {
+                for (let j = 0; j <= 2; j++) {
+                    if (board[i][j] === 0) {
+                        final_x_cord = i;
+                        final_y_cord = j;
+                        break;
+                    }
+                }
+                if (final_x_cord !== -1 && final_y_cord !== -1) {
+                    break;
+                }
+            }
+        } else if (itemType === "Cloth") {
+            // for cloth
+            final_x_cord = -1;
+            final_y_cord = -1;
+            for (let i = 1; i >= 0; i--) {
+                for (let j = 0; j <= 2; j++) {
+                    if (board[i][j] === 0) {
+                        final_x_cord = i;
+                        final_y_cord = j;
+                        break;
+                    }
+                }
+                if (final_x_cord !== -1 && final_y_cord !== -1) {
+                    break;
+                }
+            }
+        } else {
+            // for other
+            final_x_cord = -1;
+            final_y_cord = -1;
+            for (let i = 0; i >= 0; i--) {
+                for (let j = 0; j <= 2; j++) {
+                    if (board[i][j] === 0) {
+                        final_x_cord = i;
+                        final_y_cord = j;
+                        break;
+                    }
+                }
+                if (final_x_cord !== -1 && final_y_cord !== -1) break;
+            }
+        }
+
+        if (final_x_cord === -1 && final_y_cord === -1) {
+            return res.status(200).json({ status: "error no slots available" });
+        }
+
+        let item = {
+            serial_number: data.serial_number,
+            manufacturer: data.manufacturer,
+            date_of_entry: new Date(),
+            date_of_expiry: data.date_of_expiry,
+            item_type: data.item_type,
+            x_cord: (final_x_cord),
+            y_cord: (final_y_cord)
+        };
+
+
+        let count = n.toString();
+        //console.log(typeof (count));
+        //console.log(count);
+
+        //db.ref("Packages").push(item);
+        db.ref("Packages").child(count).set(item);
+
+        return res.status(200).json({ status: "success", data: item });
+    })
+
+}
+
 
 // On the all information product page I need to get all the information one by one
 Router.route('/get_info')
     .get((req, res) => {
-
         db.ref("Packages").once('value', function (snap) {
             return res.status(200).json(snap.val());
         })
